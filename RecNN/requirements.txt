@@ -1,0 +1,14 @@
+scipy
+# numpy==1.19.2
+tensorboard
+pymilvus
+# torch==1.6.0 # install with conda instead https://pytorch.org/
+tqdm
+torch_optimizer
+matplotlib
+jupyterthemes
+pandas
+scikit_learn
+sphinx_rtd_theme
+streamlit
+pytest

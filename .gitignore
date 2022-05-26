@@ -1,0 +1,7 @@
+venv
+.idea
+test_data
+*.ckpt
+__pycache__
+test_functions
+
