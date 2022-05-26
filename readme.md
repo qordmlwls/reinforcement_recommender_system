@@ -1,6 +1,6 @@
-# openworld semi-supervised learning
-- This project is for testing semi-supervised learning of text
-- The research process can be seen here: https://joyous-snout-4cc.notion.site/Classification-Classify-Garbage-documents-using-Open-world-Semi-Supervised-Learning-4226a881f8ad46d195a9b36f0de0e0d9
+# Reinforcement learning recommender system
+- This project is for testing Reinforcement learning recommender system
+- The research process can be seen here: https://joyous-snout-4cc.notion.site/Reinforcement-Learning-Social-Media-content-recommender-system-cef42815cae04edfa8d4fca95e0d87a1
 ## Structure
 - [mydataset]
   - movies.csv -> information of movies(title, genre)
@@ -18,7 +18,9 @@
   - module_for_generating_embedding.py -> data preprocessing module(generate embeddings)
   - module_for_real_time_prediction.py -> prediction module
 
-
+- [output]
+  - rank_df.csv -> output of recommendation list from model prediction
+  
 - [test] : 
   - test_preprocessing -> execute preprocessing
   - test_train.py -> execute train
