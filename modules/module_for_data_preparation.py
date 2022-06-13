@@ -5,35 +5,38 @@ import time
 import datetime
 import pickle
 import sys, os
+
 sys.path.append(os.path.abspath(os.path.join(os.getcwd())))
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 from .module_for_generating_embedding import Model, get_embedding
 import torch
 import dateutil.parser
 
+
 class DataPreparation:
     def __init__(self, path):
         self.recommend_limit = 5000
         self.pretrained_model = None
         self.args = {
-                    'random_seed': 42,  # Random Seed
-                    'pretrained_model': "beomi/KcELECTRA-base",  # Transformers PLM name
-                    'pretrained_tokenizer': "beomi/KcELECTRA-base",
-                    # Optional, Transformers Tokenizer Name. Overrides `pretrained_model`
-                    'batch_size': 32,
-                    'lr': 5e-6,  # Starting Learning Rate
-                    'epochs': 5,  # Max Epochs
-                    'max_length': 150,  # Max Length input size
-                    'train_data_path': "../input/SNS_content_classification_train.csv",  # Train Dataset file
-                    'val_data_path': '../input/test_prediction_pl.csv',  # Validation Dataset file
-                    'test_mode': False,  # Test Mode enables `fast_dev_run`
-                    'optimizer': 'AdamW',  # AdamW vs AdamP
-                    'lr_scheduler': 'exp',  # ExponentialLR vs CosineAnnealingWarmRestarts
-                    'fp16': True,  # Enable train on FP16
-                    'tpu_cores': 0,  # Enable TPU with 1 core or 8 cores
-                    'cpu_workers': os.cpu_count(),
-                    }
+            'random_seed': 42,  # Random Seed
+            'pretrained_model': "beomi/KcELECTRA-base",  # Transformers PLM name
+            'pretrained_tokenizer': "beomi/KcELECTRA-base",
+            # Optional, Transformers Tokenizer Name. Overrides `pretrained_model`
+            'batch_size': 32,
+            'lr': 5e-6,  # Starting Learning Rate
+            'epochs': 5,  # Max Epochs
+            'max_length': 150,  # Max Length input size
+            'train_data_path': "../input/SNS_content_classification_train.csv",  # Train Dataset file
+            'val_data_path': '../input/test_prediction_pl.csv',  # Validation Dataset file
+            'test_mode': False,  # Test Mode enables `fast_dev_run`
+            'optimizer': 'AdamW',  # AdamW vs AdamP
+            'lr_scheduler': 'exp',  # ExponentialLR vs CosineAnnealingWarmRestarts
+            'fp16': True,  # Enable train on FP16
+            'tpu_cores': 0,  # Enable TPU with 1 core or 8 cores
+            'cpu_workers': os.cpu_count(),
+        }
         self.path = path
+
     def refine_behavioral_data(self, behavioral_data, recommend_limit):
         """
         행동데이터 정제 후 로컬 저장, mapping_df(label_encoding data를 실제 content_id로 바꾸는 데 필요) 생성
@@ -56,7 +59,8 @@ class DataPreparation:
         # ### datetime일경우 바로
         # mydf3['when'] = mydf3['when'].apply(lambda x: datetime.datetime.strftime(x, "%m/%d/%Y, %H:%M:%S"))
         ### timestamp
-        mydf3['when'] = mydf3['when'].apply(lambda x: datetime.datetime.fromtimestamp(int(x)).strftime("%m/%d/%Y, %H:%M:%S"))
+        mydf3['when'] = mydf3['when'].apply(
+            lambda x: datetime.datetime.fromtimestamp(int(x)).strftime("%m/%d/%Y, %H:%M:%S"))
         ## 학습 데이터 로컬 저장
         mydf3.to_csv(os.path.join(self.path, 'mydataset', 'mydf.csv'), index=False)
         return tmp_df
@@ -69,13 +73,16 @@ class DataPreparation:
         # tmp_dic2 = dict([(a, b) for a, b in zip(content_data['content_id'], content_data['embeddings'])])
         my_embeddings = dict()
         for key, value in tmp_dic.items():
-            my_embeddings[key] = get_embedding(str(movie_df.loc[movie_df['movieId'] == value,['document']]['document'].iloc[0]), self.pretrained_model)
+            my_embeddings[key] = get_embedding(
+                str(movie_df.loc[movie_df['movieId'] == value, ['document']]['document'].iloc[0]),
+                self.pretrained_model)
         try:
-            with open(os.path.join(os.getcwd(),'mydataset','myembeddings.pickle'), 'wb') as handle:
+            with open(os.path.join(os.getcwd(), 'mydataset', 'myembeddings.pickle'), 'wb') as handle:
                 pickle.dump(my_embeddings, handle)
         except FileNotFoundError:
-            with open(os.path.join('..','mydataset','myembeddings.pickle'), 'wb') as handle:
+            with open(os.path.join('..', 'mydataset', 'myembeddings.pickle'), 'wb') as handle:
                 pickle.dump(my_embeddings, handle)
+
     def load_model(self):
         self.pretrained_model = Model(**self.args)
 
