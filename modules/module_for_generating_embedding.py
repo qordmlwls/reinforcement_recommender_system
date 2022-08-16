@@ -174,8 +174,13 @@ class Model(LightningModule):
     def val_dataloader(self):
         return self.dataloader(self.hparams.val_data_path, shuffle=False)
 def get_embedding(text : str, pretrained_model : None):
-
-    device = torch.device("cuda")
+    if torch.cuda.is_available():
+        device = torch.device("cuda")
+    elif torch.backends.mps.is_available():
+        device = torch.device("mps")
+    else:
+        device = torch.device("cpu")
+    # device = torch.device("cuda")
     pretrained_model.to(device)
     pretrained_model.eval()
     pretrained_model.freeze()
