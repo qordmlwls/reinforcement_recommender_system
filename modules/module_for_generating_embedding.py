@@ -184,7 +184,7 @@ def get_embedding(text : str, pretrained_model : None):
     pretrained_model.to(device)
     pretrained_model.eval()
     pretrained_model.freeze()
-    output = pretrained_model(**pretrained_model.tokenizer(text,return_tensors='pt',padding='max_length',max_length=args['max_length'],truncation=True).to('cuda')) ## gpu로 올려준다
+    output = pretrained_model(**pretrained_model.tokenizer(text,return_tensors='pt',padding='max_length',max_length=args['max_length'],truncation=True).to(device)) ## gpu로 올려준다
     embedding = output.pooler_output.squeeze().detach().cpu() ## 임배딩은 1차원의 텐서이어야 함(torch.Tensor), squeeze는 1인 차원 제거해줌
     return embedding
 # pretrained_model = Model(**args)
