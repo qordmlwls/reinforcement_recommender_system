@@ -203,4 +203,4 @@ class TrainRecommendationModel:
         print('end')
         ##### 학습된 모델 저장, 추천 리스트 prediction에 필요##################################
 
-        torch.save(policy_net.state_dict(), join(dirname(dirname(__file__))), 'models', 'trained_model', 'policy_net.pt')
+        torch.save(policy_net.state_dict(), join(dirname(dirname(__file__)), 'models', 'trained_model', 'policy_net.pt'))
