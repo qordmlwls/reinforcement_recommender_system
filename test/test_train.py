@@ -58,12 +58,12 @@ def reinforce_with_corr():
     추천 리스트 구하는 데 필요한 모델 학습
     policy_net이 추천 리스트 prediction하는 모델임
     """
-    beta_net = Beta().to(cuda)
-    value_net = recnn.nn.models.Critic(input_size, num_items, 2048, 54e-2).to(cuda)
-    policy_net = recnn.nn.models.DiscreteActor(input_size, num_items, 2048).to(cuda)
+    beta_net = Beta().to(device)
+    value_net = recnn.nn.models.Critic(input_size, num_items, 2048, 54e-2).to(device)
+    policy_net = recnn.nn.models.DiscreteActor(input_size, num_items, 2048).to(device)
 
     reinforce = recnn.nn.Reinforce(policy_net, value_net)
-    reinforce = reinforce.to(cuda)
+    reinforce = reinforce.to(device)
 
     reinforce.writer = SummaryWriter(log_dir=os.path.join('runs','no_corr'))
     plotter = recnn.utils.Plotter(reinforce.loss_layout, [['value', 'policy']], )
@@ -167,9 +167,12 @@ num_items = len(keyword_meta['book_id'])  # n items to recommend. Can be adjuste
 
 if __name__ == '__main__':
 
-
-
-    cuda = torch.device('cuda')
+    if torch.cuda.is_available():
+        device = torch.device("cuda")
+    elif torch.backends.mps.is_available():
+        device = torch.device("mps")
+    else:
+        device = torch.device("cpu")
 
     # if os.path.isfile(os.path.join('..','mydataset', 'frame_env.pkl')):
     #     os.remove(os.path.join('..','mydataset', 'frame_env.pkl')) ##frame_env는 input_size결정, 추천 목록 수가 항상 바뀔 수 있으므로 삭제 후 시작
