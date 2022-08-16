@@ -159,7 +159,7 @@ def prepare_batch_dynamic_size(batch, item_embeddings_tensor, embed_batch=None):
 
 
 def prepare_batch_static_size(
-    batch, item_embeddings_tensor, frame_size=10, embed_batch=batch_tensor_embeddings
+    batch, item_embeddings_tensor, frame_size=10, embed_batch=batch_tensor_embeddings, num_items=500 ##모듈화 위해 추가
 ):
     item_t, ratings_t, sizes_t, users_t = [], [], [], []
     for i in range(len(batch)):
@@ -184,6 +184,7 @@ def prepare_batch_static_size(
         batch=batch,
         item_embeddings_tensor=item_embeddings_tensor,
         frame_size=frame_size,
+        num_items=num_items ##모듈화 위해 추가
     )
 
 

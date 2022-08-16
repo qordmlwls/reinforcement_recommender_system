@@ -221,6 +221,8 @@ class FrameEnv(Env):
         self.frame_size = frame_size
         self.batch_size = batch_size
         self.num_workers = num_workers
+        #####원래 없지만 나중에 모듈화를 위해 추가한 것
+        self.num_items = kwargs['num_items']
 
         self.train_dataloader = DataLoader(
             self.base.train_user_dataset,
@@ -244,6 +246,8 @@ class FrameEnv(Env):
             self.base.embeddings,
             embed_batch=self.embed_batch,
             frame_size=self.frame_size,
+            ### 원래 없지만 모듈화를 위해 추가한 것
+            num_items=self.num_items
         )
         return batch
 

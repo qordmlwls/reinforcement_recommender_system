@@ -79,8 +79,8 @@ def reinforce_update(
 
     # Due to its mechanics, reinforce doesn't support testing!
     learn = True
-
-    state, action, reward, next_state, done = data.get_base_batch(batch)
+    ### get_base_batch device 수정
+    state, action, reward, next_state, done = data.get_base_batch(batch, device)
 
     predicted_probs = nets["policy_net"].select_action(
         state=state, action=action, K=params["K"], learn=learn, writer=writer, step=step
